@@ -11,6 +11,10 @@
 
 Packages requires:
 
+- rich
+- pygame
+- pyini
+
 ## View documents of this project
 
 - **LICENSE**: MIT license
