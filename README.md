@@ -2,10 +2,10 @@
 
 ## Contributors
 
-| Rank |      Name      |               Reason               |                   Github Username                   |
-|:----:|:--------------:|:----------------------------------:|:---------------------------------------------------:|
-|  1   | hellomyprogram | Fixed 3 bug & Propose 9 suggestion | [hehe-minecraft](https://github.com/hehe-minecraft) |
-|  2   |  cjjJasonchen  |     Fixed 3 bugs & Support me      |                       Unknown                       |
+| Rank |      Name      |               Reason                | Github Username |
+|:----:|:--------------:|:-----------------------------------:|:---------------:|
+|  1   | hellomyprogram | Fixed 3 bugs & Propose 9 suggestion | hehe-minecraft  |
+|  2   |  cjjJasonchen  |      Fixed 3 bugs & Support me      |     Unknown     |
 
 ## Install Packages
 

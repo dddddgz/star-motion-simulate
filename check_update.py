@@ -17,9 +17,9 @@ if req and o.path.isfile("version") and o.path.isdir(".git") and _check_internet
     update = r.get("https://dddddgz.github.io/t1.json").text
     data = j.loads(update)
     with open("version") as _f:
-        va, vb = map(int, _f.read().split())[:2]
+        x = list(map(int, _f.read().split()))
+        va, vb = x[:2]
     if data["va"] > va or (data["va"] == va and data["vb"] > vb):
-        if s.getstatusoutput("git pull")[0] == 1:
-            console.log("[blink white on purple b i u]It's time for Update! You did not installed Git LoL[/]")
-        else:
-            console.log("[white on purple]Updated Successfully[/]")
+        if len(x) > 2:
+            s.getstatusoutput("git pull")
+        console.log("[blink white on purple b i u]It's time for Update![/]")
