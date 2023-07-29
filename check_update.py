@@ -1,21 +1,25 @@
 try:
-    import requests as _r
-    _req = True
+    import requests as r
+    req = True
 except ImportError:
-    _req = False
+    req = False
 
-import os as _o
-import subprocess as _s
-import json as _j
-import rich as _ri
+import os as o
+import subprocess as s
+import json as j
+import rich.console as rc
 
 def _check_internet():
-    return not _s.getstatusoutput("ping github.com -n 1")[0]
+    return not s.getstatusoutput("ping github.com -n 1")[0]
 
-if _req and _o.path.isfile("version") and _o.path.isdir(".git") and _check_internet():
-    _update = _r.get("https://dddddgz.github.io/t1.json").text
-    _data = _j.loads(_update)
+if req and o.path.isfile("version") and o.path.isdir(".git") and _check_internet():
+    console = rc.Console()
+    update = r.get("https://dddddgz.github.io/t1.json").text
+    data = j.loads(update)
     with open("version") as _f:
-        _va, _vb = map(int, _f.read().split())
-    if _data["va"] > _va or (_data["va"] == _va and _data["vb"] > _vb):
-        _ri.print("[white on blue][i u b]time for update[/][/]")
+        va, vb = map(int, _f.read().split())[:2]
+    if data["va"] > va or (data["va"] == va and data["vb"] > vb):
+        if s.getstatusoutput("git pull")[0] == 1:
+            console.log("[blink white on purple b i u]It's time for Update! You did not installed Git LoL[/]")
+        else:
+            console.log("[white on purple]Updated Successfully[/]")
