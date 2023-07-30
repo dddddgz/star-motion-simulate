@@ -126,7 +126,7 @@ class RightKey(pygame.sprite.Sprite):
         # Each 30 px
         self.image = pygame.Surface((100, 30 * 5))
         self.items = [
-            RightKey.text_surf("hhi")
+            RightKey.text_surf("test")
         ]
         self.rect = self.image.get_rect()
         self.flush()
@@ -140,4 +140,14 @@ class RightKey(pygame.sprite.Sprite):
         Flush sprite
         :return: None
         """
-        pass
+        hover_y = pygame.mouse.get_pos()[1] - self.rect.top
+        y = 0
+        for item in self.items:
+            self.image.fill((0, 0, 0))
+            if y < hover_y < y + 30:
+                surf = pygame.Surface(item.get_size())
+                surf.fill((0, 0, 255))
+                surf.blit(item, (0, 0))
+                item = surf
+            self.image.blit(item, (0, y))
+            y += 30
