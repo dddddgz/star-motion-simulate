@@ -2,8 +2,8 @@ import sys
 if float(sys.version[:3].rstrip(".")) < 3.9:
     print("Your Python Is Too Old")
 
-import check_update
-del check_update
+# import check_update
+# del check_update
 
 import pyini
 import os
@@ -188,7 +188,9 @@ pygame.display.set_caption(language["game"]["title"])
 with open(f"simulation/{config['simulation']['file']}.simulation", "r", encoding="utf-8") as f:
     sprites = eval(f.read())
 
-message = Message("", (width - 10, 10))
+rk = RightKey()
+
+message = Message()
 
 running = True
 while running:
@@ -212,6 +214,8 @@ while running:
         screen.blit(message.image, message.rect)
     except pygame.error:
         pass
+    rk.flush()
+    screen.blit(rk.image, rk.rect)
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -270,6 +274,3 @@ while running:
             elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
                 zoom(-1)
 pygame.quit()
-
-# Quit Tkinter
-root.destroy()

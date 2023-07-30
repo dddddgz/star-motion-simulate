@@ -89,10 +89,13 @@ class Star(pygame.sprite.Sprite):
         self.trail.append(TrailPoint((self.x, self.y)))
 
 class Message(pygame.sprite.Sprite):
-    def __init__(self, text, pos):
+    def __init__(self):
+        """
+        A message object
+        """
         pygame.sprite.Sprite.__init__(self)
-        self._text = text
-        self.flush(pos)
+        self._text = ""
+        self.flush((pygame.display.get_surface().get_width() - 10, 10))
 
     @property
     def text(self):
@@ -105,6 +108,36 @@ class Message(pygame.sprite.Sprite):
         self.flush(pos)
 
     def flush(self, pos):
+        """
+        Flush image and rect attribute
+        :param pos:
+        :return:
+        """
         self.image = Config.font.render(self._text, False, (255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.topright = pos
+
+class RightKey(pygame.sprite.Sprite):
+    def __init__(self):
+        """
+        Right key menu
+        """
+        pygame.sprite.Sprite.__init__(self)
+        # Each 30 px
+        self.image = pygame.Surface((100, 30 * 5))
+        self.items = [
+            RightKey.text_surf("hhi")
+        ]
+        self.rect = self.image.get_rect()
+        self.flush()
+
+    @staticmethod
+    def text_surf(text):
+        return Config.font.render(text, False, (255, 255, 255))
+
+    def flush(self):
+        """
+        Flush sprite
+        :return: None
+        """
+        pass
