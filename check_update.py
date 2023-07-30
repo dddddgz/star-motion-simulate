@@ -16,9 +16,9 @@ if req and o.path.isfile("version") and o.path.isdir(".git") and _check_internet
     console = rc.Console()
     update = r.get("https://dddddgz.github.io/t1.json").text
     data = j.loads(update)
-    with open("version") as _f:
-        x = list(map(int, _f.read().split()))
-        va, vb = x[:2]
+    with open("version") as f:
+        x = f.read().split()
+        va, vb = int(x[0]), int(x[1])
     if data["va"] > va or (data["va"] == va and data["vb"] > vb):
         if len(x) > 2:
             s.getstatusoutput("git pull")
