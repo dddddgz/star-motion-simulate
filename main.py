@@ -1,3 +1,7 @@
+import sys
+if float(sys.version[:3].rstrip(".")) < 3.9:
+    print("Your Python Is Too Old")
+
 import check_update
 del check_update
 
@@ -16,6 +20,9 @@ pygame.key.set_repeat(1000, 50)
 
 # Constant of gravitation
 G = 6
+
+# current path
+PATH = os.path.dirname(__file__)
 
 # rich Console
 console = Console()
@@ -170,6 +177,10 @@ paused: bool              = False
 # Main screen
 screen = pygame.display.set_mode(size)
 
+# Tkinter window for save file
+root = tk.Tk()
+root.withdraw()
+
 movement: number = 10
 pygame.display.set_icon(pygame.image.load(config["window"]["icon"]))
 pygame.display.set_caption(language["game"]["title"])
@@ -222,22 +233,30 @@ while running:
             if event.key == pygame.K_SPACE:
                 paused = not paused
                 message.text = [
-                    language["config"]["resume"],
-                    language["config"]["pause"]
+                    language["game"]["resume"],
+                    language["game"]["pause"]
                 ][paused]
-            elif event.mod & pygame.KMOD_CTRL and event.key == pygame.K_s:
-                root = tk.Tk()
-                root.withdraw()
-                filepath = fd.asksaveasfilename(
-                    initialdir=os.path.dirname(__file__),
-                    defaultextension=".png",
-                    filetypes=[
-                        (language["save"]["picture"] % "PNG", "*.png"),
-                        (language["save"]["other"], "*.*")]
-                )
-                if filepath:
-                    pygame.image.save(screen, filepath)
-                root.destroy()
+                MessageThread().start()
+            elif event.mod & pygame.KMOD_CTRL:
+                if event.key == pygame.K_d:
+                    filepath = fd.asksaveasfilename(
+                        initialdir=PATH,
+                        defaultextension=".png",
+                        filetypes=[
+                            (language["save"]["picture"] % "PNG", "*.png"),
+                            (language["save"]["other"], "*.*")]
+                    )
+                    if filepath:
+                        pygame.image.save(screen, filepath)
+                elif event.key == pygame.K_s:
+                    fd.asksaveasfilename(
+                        initialdir=os.path.join(PATH, "simulation"),
+                        defaultextension=".png",
+                        filetypes=[
+                            (language["save"]["simulation"], "*.simulation"),
+                            (language["save"]["other"], "*.*")
+                        ]
+                    )
             elif event.key in (pygame.K_LEFT, pygame.K_KP_4):
                 change_view(movement, 0)
             elif event.key in (pygame.K_RIGHT, pygame.K_KP_6):
@@ -251,3 +270,6 @@ while running:
             elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
                 zoom(-1)
 pygame.quit()
+
+# Quit Tkinter
+root.destroy()
