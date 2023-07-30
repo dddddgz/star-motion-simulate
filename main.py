@@ -1,4 +1,7 @@
 import sys
+
+import pygame.mouse
+
 if float(sys.version[:3].rstrip(".")) < 3.9:
     print("Your Python Is Too Old")
 
@@ -168,11 +171,11 @@ with open(f"config/language_{config['language']['default']}.ini", "r", encoding=
 size = width, height = (1000, 1000)
 
 # fps manager
-clock:  pygame.time.Clock = pygame.time.Clock()
-# MOUSEBUTTONDOWN + MOUSEMOTION = drag
-drag:   bool              = False
-# if game is paused
-paused: bool              = False
+clock:   pygame.time.Clock = pygame.time.Clock()
+# MOUSEBUTTONDOWN + MOUSEMOTION = MOUSEDRAG
+drag:    bool              = False
+# show right key menu or no
+show_rk: bool              = False
 
 # Main screen
 screen = pygame.display.set_mode(size)
@@ -196,7 +199,7 @@ running = True
 while running:
     screen.fill((0, 0, 0))
     clock.tick(30)
-    if not paused:
+    if not Config.pause:
         move(2)
     for sprite, trail in map(lambda xxx: (xxx, xxx.trail), sprites):
         if len(trail) < 2:
@@ -214,8 +217,9 @@ while running:
         screen.blit(message.image, message.rect)
     except pygame.error:
         pass
-    rk.flush()
-    screen.blit(rk.image, rk.rect)
+    if show_rk:
+        rk.flush()
+        screen.blit(rk.image, rk.rect)
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -223,9 +227,15 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 drag = True
+                show_rk = False
+            elif event.button == 3:
+                # clicked right mouse key
+                show_rk = True
+                rk.rect.topleft = event.pos
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 drag = False
+                show_rk = False
             elif event.button == 4:
                 zoom(1)
             elif event.button == 5:
@@ -235,11 +245,11 @@ while running:
                 change_view(*event.rel)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                paused = not paused
+                Config.pause = not Config.pause
                 message.text = [
                     language["game"]["resume"],
                     language["game"]["pause"]
-                ][paused]
+                ][Config.pause]
                 MessageThread().start()
             elif event.mod & pygame.KMOD_CTRL:
                 if event.key == pygame.K_d:
