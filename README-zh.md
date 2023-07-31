@@ -10,7 +10,7 @@
 
 ### 语言设置
 
-如果你希望更改游戏的语言，则你可以打开 `config/config.ini`，找到 `[language]`下的 `default` 选项，将它更改为你希望显示语言（如 `zh-CN`）。
+如果你希望更改游戏的语言，则你可以打开 `config/config.ini`，找到 `[language]`下的 `default` 选项，将它更改为你希望显示语言（如 `zh`）。
 
 ### 加载模拟
 
@@ -24,7 +24,8 @@
 6. 粘贴文件名
 7. 运行程序（如果程序已经在运行，关闭再运行它）
 
-> 你也可以在 `simulation` 文件夹下新建属于你自己的模拟。如果你认为它不错，可以 Fork 这个项目，然后[提交 Pull Request](https://github.com/dddddgz/star-motion-simulate/pulls)
+> 你也可以在游戏中按下 `Ctrl+S` 组合键导出当前状态的模拟。  
+> 如果你认为它不错，可以 Fork 这个项目，然后[提交 Pull Request](https://github.com/dddddgz/star-motion-simulate/pulls)。
 
 ## 操作说明
 
@@ -33,4 +34,6 @@
 - 放大 / 缩小：鼠标滚轮 / + 和 - 键
 - 移动视角：鼠标拖动 / ↑↓←→
 - 暂停：空格键
-- 导出为图片：Ctrl+S 组合键
+- 导出为图片：`Ctrl+D` 组合键
+- 导出为 `.simulation` 模拟文件：`Ctrl+S` 组合键
+- 打开侧边栏：`P` 键
