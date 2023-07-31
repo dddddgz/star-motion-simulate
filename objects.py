@@ -72,7 +72,13 @@ class Star(pygame.sprite.Sprite):
     def __repr__(self):
         return self.name
 
-    __str__ = __repr__
+    def __str__(self):
+        vars = (
+            self.name,   self.x,      self.y,
+            self.vx,     self.vy,     self.mass,
+            self.locked, self.radius, self.color,
+        )
+        return f"Sprite{vars}"
 
     @property
     def info(self):
@@ -116,49 +122,3 @@ class Message(pygame.sprite.Sprite):
         self.image = Config.font.render(self._text, False, (255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.topright = pos
-
-class RightKey(pygame.sprite.Sprite):
-    def __init__(self):
-        """
-        Right key menu
-        """
-        pygame.sprite.Sprite.__init__(self)
-        # Each 30 px
-        self.image = pygame.Surface((100, 30))
-        self.items = [
-            (self.text_surf("Pause"), self.pause)
-        ]
-        self.rect = self.image.get_rect()
-        self.flush()
-
-    @staticmethod
-    def text_surf(text):
-        return Config.font.render(text, False, (255, 255, 255))
-
-    @staticmethod
-    def pause():
-        Config.pause = True
-
-    def flush(self):
-        """
-        Flush sprite
-        :return: None
-        """
-        if not self.rect.collidepoint(pygame.mouse.get_pos()):
-            return
-        hover_y = pygame.mouse.get_pos()[1] - self.rect.top
-        y = 0
-        for item in self.items:
-            self.image.fill((0, 0, 0))
-            if y < hover_y < y + 30:
-                surf = pygame.Surface((self.image.get_width(), 30))
-                surf.fill((0, 0, 255))
-                surf.blit(item[0], (0, 0))
-                item = (surf, item[1])
-            self.image.blit(item[0], (0, y))
-            y += 30
-        if pygame.mouse.get_pressed():
-            # is user pressed left mouse button key?
-            # if it's true, then do function
-            index = hover_y // 30
-            self.items[index][1]()

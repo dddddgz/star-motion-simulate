@@ -174,8 +174,6 @@ size = width, height = (1000, 1000)
 clock:   pygame.time.Clock = pygame.time.Clock()
 # MOUSEBUTTONDOWN + MOUSEMOTION = MOUSEDRAG
 drag:    bool              = False
-# show right key menu or no
-show_rk: bool              = False
 
 # Main screen
 screen = pygame.display.set_mode(size)
@@ -190,8 +188,6 @@ pygame.display.set_caption(language["game"]["title"])
 
 with open(f"simulation/{config['simulation']['file']}.simulation", "r", encoding="utf-8") as f:
     sprites = eval(f.read())
-
-rk = RightKey()
 
 message = Message()
 
@@ -217,9 +213,6 @@ while running:
         screen.blit(message.image, message.rect)
     except pygame.error:
         pass
-    if show_rk:
-        rk.flush()
-        screen.blit(rk.image, rk.rect)
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -231,7 +224,6 @@ while running:
             elif event.button == 3:
                 # clicked right mouse key
                 show_rk = True
-                rk.rect.topleft = event.pos
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 drag = False
@@ -263,14 +255,20 @@ while running:
                     if filepath:
                         pygame.image.save(screen, filepath)
                 elif event.key == pygame.K_s:
-                    fd.asksaveasfilename(
+                    filepath = fd.asksaveasfilename(
                         initialdir=os.path.join(PATH, "simulation"),
-                        defaultextension=".png",
+                        defaultextension=".simulation",
                         filetypes=[
                             (language["save"]["simulation"], "*.simulation"),
                             (language["save"]["other"], "*.*")
                         ]
                     )
+                    if filepath:
+                        with open(filepath, "w") as f:
+                            f.write("[\n")
+                            for sprite in sprites:
+                                f.write(f"    {str(sprite)},\n")
+                            f.write("]")
             elif event.key in (pygame.K_LEFT, pygame.K_KP_4):
                 change_view(movement, 0)
             elif event.key in (pygame.K_RIGHT, pygame.K_KP_6):
