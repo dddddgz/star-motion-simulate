@@ -1,12 +1,13 @@
 import sys
 
-import pygame.mouse
+import pygame.display
 
 if float(sys.version[:3].rstrip(".")) < 3.9:
     print("Your Python Is Too Old")
 
-# import check_update
-# del check_update
+if len(sys.argv) > 1 and "cu" in sys.argv:
+    import check_update
+    del check_update
 
 import pyini
 import os
@@ -91,7 +92,7 @@ def move(t):
                 sprites_to_delete.append(lighter)
                 heavier.vx += lighter.vx
                 heavier.vy += lighter.vy
-                temp = language["star"]["collide"] % (heavier, lighter)
+                temp = language["star"]["collide"] % (repr(heavier), repr(lighter))
                 message.text = temp
                 console.log(temp)
                 del temp
@@ -159,6 +160,13 @@ def change_view(move_x, move_y):
     message.text = language["game"]["rel"] % str(tuple(Config.rel))
     MessageThread().start()
 
+def pause_game():
+    """
+    Change game status (paused or no)
+    :return: None
+    """
+    Config.pause = not Config.pause
+
 # Read main config file
 with open("config/config.ini", "r", encoding="utf-8") as f:
     config = pyini.ConfigParser(f.read())
@@ -185,11 +193,18 @@ root.withdraw()
 movement: number = 10
 pygame.display.set_icon(pygame.image.load(config["window"]["icon"]))
 pygame.display.set_caption(language["game"]["title"])
+pygame.mouse.set_visible(False)
 
 with open(f"simulation/{config['simulation']['file']}.simulation", "r", encoding="utf-8") as f:
     sprites = eval(f.read())
 
-message = Message()
+message: Message      = Message()
+pause:   Button       = Button("pause.png", pause_game)
+buttons: list[Button] = [pause]
+
+mouse_normal: pygame.Surface = pygame.image.load("normal.png")
+mouse_click : pygame.Surface = pygame.image.load("click.png")
+mouse       : pygame.Surface = mouse_normal
 
 running = True
 while running:
@@ -213,6 +228,15 @@ while running:
         screen.blit(message.image, message.rect)
     except pygame.error:
         pass
+    if screen.get_width() > width:
+        for button in buttons:
+            screen.blit(button.image, button.rect)
+            if button.rect.collidepoint(pygame.mouse.get_pos()):
+                mouse = mouse_click
+            else:
+                mouse = mouse_normal
+    if pygame.mouse.get_focused() != 0:
+        screen.blit(mouse, pygame.mouse.get_pos())
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -220,14 +244,15 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 drag = True
-                show_rk = False
             elif event.button == 3:
                 # clicked right mouse key
                 show_rk = True
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 drag = False
-                show_rk = False
+                for button in buttons:
+                    if button.rect.collidepoint(event.pos):
+                        button()
             elif event.button == 4:
                 zoom(1)
             elif event.button == 5:
@@ -243,6 +268,11 @@ while running:
                     language["game"]["pause"]
                 ][Config.pause]
                 MessageThread().start()
+            elif event.key == pygame.K_p:
+                if screen.get_width() > width:
+                    screen = pygame.display.set_mode(size)
+                else:
+                    screen = pygame.display.set_mode((width + 100, height))
             elif event.mod & pygame.KMOD_CTRL:
                 if event.key == pygame.K_d:
                     filepath = fd.asksaveasfilename(

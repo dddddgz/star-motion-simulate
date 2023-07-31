@@ -108,12 +108,12 @@ class Message(pygame.sprite.Sprite):
         return self._text
 
     @text.setter
-    def text(self, text):
+    def text(self, text: str):
         pos = self.rect.topright
         self._text = text
         self.flush(pos)
 
-    def flush(self, pos):
+    def flush(self, pos: Iterable[number]):
         """
         Flush image and rect attribute
         :param pos:
@@ -122,3 +122,18 @@ class Message(pygame.sprite.Sprite):
         self.image = Config.font.render(self._text, False, (255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.topright = pos
+
+class Button(pygame.sprite.Sprite):
+    count = 0
+
+    def __init__(self, img_name: str, function: Any):
+        pygame.sprite.Sprite.__init__(self)
+        self._id = self.count
+        Button.count += 1
+        self.func = function
+        self.image = pygame.image.load(img_name)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (1010, self._id * 50 + 10)
+
+    def __call__(self):
+        self.func()
