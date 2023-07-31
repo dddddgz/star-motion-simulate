@@ -1,7 +1,5 @@
 import sys
 
-import pygame.display
-
 if float(sys.version[:3].rstrip(".")) < 3.9:
     print("Your Python Is Too Old")
 
@@ -280,7 +278,8 @@ while running:
                         defaultextension=".png",
                         filetypes=[
                             (language["save"]["picture"] % "PNG", "*.png"),
-                            (language["save"]["other"], "*.*")]
+                            (language["save"]["other"], "*.*")
+                        ]
                     )
                     if filepath:
                         pygame.image.save(screen, filepath)

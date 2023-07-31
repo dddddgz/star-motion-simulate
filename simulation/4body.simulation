@@ -1,8 +1,8 @@
 [
-    #    name      radius color     x    y    vx    vy mass locked
-    Star("star1",  10,    "green",  100, 100,   2,  0, 1000),
-    Star("star2",  10,    "blue",   800, 100,   0,  2, 1000),
-    Star("star3",  10,    "cyan",   800, 800,  -2,  0, 1000),
-    Star("star4",  10,    "yellow", 100, 800,   0, -2, 1000),
-    Star("planet", 5,     "khaki",   50, 100,   0,  6,  1),
+    #    name      radius color     x    y    vx     vy mass locked
+    Star("star1",  10,    "green",  500, 100,   2.5,    0, 1000),
+    Star("star2",  10,    "blue",   900, 500,   0,    2.5, 1000),
+    Star("star3",  10,    "cyan",   500, 900,  -2.5,    0, 1000),
+    Star("star4",  10,    "yellow", 100, 500,   0,   -2.5, 1000),
+    Star("planet",  5,    "khaki",  600, 100,   0,      5,    1),
 ]
