@@ -153,8 +153,8 @@ def change_view(move_x, move_y):
     :param move_y: rel y
     :return: None
     """
-    Config.rel[0] += move_x
-    Config.rel[1] += move_y
+    Config.rel[0] += int(round(move_x))
+    Config.rel[1] += int(round(move_y))
     message.text = language["game"]["rel"] % str(tuple(Config.rel))
     MessageThread().start()
 
@@ -257,7 +257,7 @@ while running:
                 zoom(-1)
         elif event.type == pygame.MOUSEMOTION:
             if drag:
-                change_view(*event.rel)
+                change_view(*map(lambda x: x / Config.scale, event.rel))
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 Config.pause = not Config.pause
@@ -299,13 +299,13 @@ while running:
                                 f.write(f"    {str(sprite)},\n")
                             f.write("]")
             elif event.key in (pygame.K_LEFT, pygame.K_KP_4):
-                change_view(movement, 0)
+                change_view(movement / Config.scale, 0)
             elif event.key in (pygame.K_RIGHT, pygame.K_KP_6):
-                change_view(-movement, 0)
+                change_view(-movement / Config.scale, 0)
             elif event.key in (pygame.K_UP, pygame.K_KP_8):
-                change_view(0, movement)
+                change_view(0, movement / Config.scale)
             elif event.key in (pygame.K_DOWN, pygame.K_KP_2):
-                change_view(0, -movement)
+                change_view(0, -movement / Config.scale)
             elif event.key in (pygame.K_EQUALS, pygame.K_KP_PLUS):
                 zoom(1)
             elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
