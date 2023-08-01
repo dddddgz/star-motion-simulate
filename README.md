@@ -20,7 +20,7 @@ Packages requires:
 - **LICENSE**: MIT license
 - **AUTHOR**: dddddgz
 
-Choose your language: [Chinese Simplified](README-zh.md) | [English](README-en.md)
+Choose your language: [Chinese Simplified](README-zh.md) | [English](README-en.md) | [Russian](README-ru.md)
 
 > Each language has some links removed that are not its content. (For example, links to some Chinese communities have been removed from the [English version](README-en.md)).  
 > If you want to view the full content, you can view the Simplified Chinese content and translate it with Chrome.
