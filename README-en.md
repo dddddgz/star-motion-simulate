@@ -32,9 +32,8 @@ Follow the steps below:
 > This part introduces how to operate the program after it is running.
 
 - Zoom in/out: mouse wheel / + and - keys
--Move view: mouse drag / ↑↓←→
+- Move view: mouse drag / ↑↓←→
 - Pause: spacebar
 - Export as image: `Ctrl+D` key combination
 - Export as `.simulation` simulation file: `Ctrl+S` key combination
 - Open sidebar: `P` key
-- 
