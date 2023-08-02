@@ -14,7 +14,7 @@ import numpy as np
 from rich.console import Console
 from math import isclose, dist
 from time import sleep
-from threading import Thread, Event
+from threading import Timer
 from objects import *
 
 pygame.init()
@@ -29,37 +29,21 @@ PATH = os.path.dirname(__file__)
 # rich Console
 console = Console()
 
-class MessageThread(Thread):
-    def __init__(self):
-        super().__init__()
-        self._message = ""
-        self._message_changed = False
-        self._running = True
-        self._event = Event()
+d_id = 0
 
-    def run(self):
-        while self._running and running:
-            try:
-                self._event.clear()
-                sleep(2)
-                while self._message:
-                    assert not self._message_changed  # wait another 2 seconds if message changed.
-                    self._message = self._message[:-1]
-                    # ---> Render function <---
-                self._event.wait()
-            except AssertionError:
-                self._message_changed = False
-                continue
+def disappear_message():
+    global d_id
+    Timer(1, disappear_function, args=[d_id]).start()
+    d_id += 1
 
-    @property
-    def message(self):
-        return self._message
-
-    @message.setter
-    def message(self, new_message):
-        self._message = new_message
-        self._message_changed = True
-        self._event.set()
+def disappear_function(real_id):
+    if d_id - 1 == real_id:
+        try:
+            while message.text:
+                message.text = message.text[:-1]
+                sleep(0.05)
+        except pygame.error:
+            return
 
 def get_distance(sprite1: Star, sprite2: Star):
     x1, x2 = sprite1.x, sprite2.x
@@ -97,7 +81,7 @@ def move(t):
                 message.text = temp
                 console.log(temp)
                 del temp
-                MessageThread().start()
+                disappear_message()
                 break
             f = G * m1 * m2 / (r ** 2)
             if isclose(f, 0):
@@ -136,7 +120,7 @@ def is_collide(sprite1, sprite2):
 def zoom(direction, each=0.02):
     """
     Zoom size
-    :param direction: nagative (zoom out) / positive (zoom in)
+    :param direction: nagative (zoom out) / positive (zoom in) / zero (reset)
     :param each: zoom size
     :return: None
     """
@@ -148,8 +132,10 @@ def zoom(direction, each=0.02):
         Config.scale -= each
         if Config.scale < 0.02:
             Config.scale = 0.02
+    elif direction == 0:
+        Config.scale = 1
     message.text = language["game"]["zoom"] % Config.scale
-    MessageThread().start()
+    disappear_message()
 
 def change_view(move_x, move_y):
     """
@@ -161,7 +147,7 @@ def change_view(move_x, move_y):
     Config.rel[0] += int(round(move_x))
     Config.rel[1] += int(round(move_y))
     message.text = language["game"]["rel"] % str(tuple(Config.rel))
-    MessageThread().start()
+    disappear_message()
 
 def pause_game():
     """
@@ -265,7 +251,6 @@ while running:
             if event.button == 1:
                 drag = True
             elif event.button == 3:
-                # clicked right mouse key
                 show_rk = True
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
@@ -286,13 +271,14 @@ while running:
                     language["game"]["resume"],
                     language["game"]["pause"]
                 ][Config.pause]
-                MessageThread().start()
+                disappear_message()
             elif event.key == pygame.K_p:
                 if screen.get_width() > width:
                     screen = pygame.display.set_mode(size)
                 else:
                     screen = pygame.display.set_mode((width + 100, height))
             elif event.mod & pygame.KMOD_CTRL:
+                # Clicked ctrl key
                 if event.key == pygame.K_d:
                     filepath = fd.asksaveasfilename(
                         initialdir=PATH,
@@ -319,6 +305,12 @@ while running:
                             for star in sprites:
                                 f.write(f"    {str(star)},\n")
                             f.write("]")
+                elif event.key == pygame.K_0:
+                    zoom(0)
+                elif event.key in (pygame.K_EQUALS, pygame.K_KP_PLUS):
+                    zoom(1)
+                elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
+                    zoom(-1)
             elif event.key in (pygame.K_LEFT, pygame.K_KP_4):
                 change_view(movement / Config.scale, 0)
             elif event.key in (pygame.K_RIGHT, pygame.K_KP_6):
@@ -327,8 +319,4 @@ while running:
                 change_view(0, movement / Config.scale)
             elif event.key in (pygame.K_DOWN, pygame.K_KP_2):
                 change_view(0, -movement / Config.scale)
-            elif event.key in (pygame.K_EQUALS, pygame.K_KP_PLUS):
-                zoom(1)
-            elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
-                zoom(-1)
 pygame.quit()
