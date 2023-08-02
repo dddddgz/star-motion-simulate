@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import sys
+
+import pygame.mouse
+
 if "-u" in sys.argv:
     import check_update
     del check_update
@@ -248,7 +251,11 @@ while running:
             else:
                 mouse = mouse_normal
     if pygame.mouse.get_focused() != 0:
-        screen.blit(mouse, pygame.mouse.get_pos())
+        pos = pygame.mouse.get_pos()
+        if mouse == mouse_click:
+            screen.blit(mouse, (pos[0] - 5, pos[1]))
+        else:
+            screen.blit(mouse, pos)
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

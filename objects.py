@@ -143,11 +143,10 @@ class Button(pygame.sprite.Sprite):
         self._id = self.count
         Button.count += 1
         self.func      = callback
-        self.text_surf = Config.font.render(title, False, (255, 255, 255))
+        self.text_surf = Config.font.render(title, False, (255, 255, 255), (64, 64, 64))
         size           = self.text_surf.get_size()
         self.prompt    = pygame.Surface((size[0] + 20, size[1] + 20))
         self.prompt.fill((64, 64, 64))
-        self.prompt.fill((0, 0, 0), (10, 10, size[0] - 20, size[1] - 20))
         self.prompt.blit(self.text_surf, (10, 10))
         self.image = pygame.image.load(img_name)
         self.rect = self.image.get_rect()
