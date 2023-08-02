@@ -98,7 +98,7 @@ class Star(pygame.sprite.Sprite):
                 self.trail.remove(point)
 
     def add_to_trail(self):
-        self.trail.append(TrailPoint((self.x, self.y)))
+        self.trail.append(TrailPoint((self.x, self.y, self.z)))
 
 class Message(pygame.sprite.Sprite):
     def __init__(self):
@@ -140,8 +140,9 @@ class Button(pygame.sprite.Sprite):
         :param title: text that will be shown when mouse hovers on the button
         """
         pygame.sprite.Sprite.__init__(self)
-        self._id = self.count
-        Button.count += 1
+        self._id       = self.count
+        Button.count  += 1
+        self._title    = title
         self.func      = callback
         self.text_surf = Config.font.render(title, False, (255, 255, 255), (64, 64, 64))
         size           = self.text_surf.get_size()
@@ -154,3 +155,16 @@ class Button(pygame.sprite.Sprite):
 
     def __call__(self):
         self.func()
+
+    @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, title):
+        self._title = title
+        self.text_surf = Config.font.render(title, False, (255, 255, 255), (64, 64, 64))
+        size           = self.text_surf.get_size()
+        self.prompt    = pygame.Surface((size[0] + 20, size[1] + 20))
+        self.prompt.fill((64, 64, 64))
+        self.prompt.blit(self.text_surf, (10, 10))

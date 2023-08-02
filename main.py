@@ -65,10 +65,7 @@ def get_distance(sprite1: Star, sprite2: Star):
     x1, x2 = sprite1.x, sprite2.x
     y1, y2 = sprite1.y, sprite2.y
     z1, z2 = sprite1.z, sprite2.z
-    dx = x2 - x1
-    dy = y2 - y1
-    dz = z2 - z1
-    return (dx ** 2 + dy ** 2 + dz ** 2) ** 0.5
+    return dist((x1, y1, z1), (x2, y2, z2))
 
 def move(t):
     sprites_to_delete = []
@@ -204,9 +201,8 @@ pygame.mouse.set_visible(False)
 with open(f"simulation/{config['simulation']['file']}.simulation", "r", encoding="utf-8") as f:
     sprites = eval(f.read())
 
-message:      Message      = Message()
-pause:        Button       = Button("pause.png", pause_game, "暂停游戏")
-buttons:      list[Button] = [pause]
+message:      Message        = Message()
+pause:        Button         = Button("pause.png", pause_game, language["button"]["pause"])
 
 mouse_normal: pygame.Surface = pygame.image.load("normal.png")
 mouse_click : pygame.Surface = pygame.image.load("click.png")
@@ -222,7 +218,7 @@ while running:
         if len(trail) < 2:
             continue
         trail = list(map(
-            lambda point: (np.array(point) + np.array(Config.rel)).tolist(), trail
+            lambda point: ((np.array(point[:2]) + np.array(Config.rel)) * Config.scale).tolist(), trail
         ))
         pygame.draw.lines(screen, star.color, False, trail, 2)
     for star in sorted(sprites, key=lambda star: star.z):
@@ -240,14 +236,21 @@ while running:
     except pygame.error:
         pass
     if screen.get_width() > width:
-        for button in buttons:
-            screen.blit(button.image, button.rect)
-            pos = pygame.mouse.get_pos()
-            if button.rect.collidepoint(pos):
-                mouse = mouse_click
-                screen.blit(button.prompt, pos)
-            else:
-                mouse = mouse_normal
+        # Pause/Resume button
+        if Config.pause:
+            pause.image = pygame.image.load("resume.png")
+            pause.title = language["button"]["resume"]
+        else:
+            pause.image = pygame.image.load("pause.png")
+            pause.title = language["button"]["pause"]
+        screen.blit(pause.image, pause.rect)
+
+        pos = pygame.mouse.get_pos()
+        if pause.rect.collidepoint(pos):
+            mouse = mouse_click
+            screen.blit(pause.prompt, pos)
+        else:
+            mouse = mouse_normal
     if pygame.mouse.get_focused() != 0:
         pos = pygame.mouse.get_pos()
         if mouse == mouse_click:
@@ -267,9 +270,8 @@ while running:
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 drag = False
-                for button in buttons:
-                    if button.rect.collidepoint(event.pos):
-                        button()
+                if pause.rect.collidepoint(event.pos):
+                    pause()
             elif event.button == 4:
                 zoom(1)
             elif event.button == 5:
