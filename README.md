@@ -15,6 +15,7 @@ Packages requires:
 - rich
 - pygame
 - pyini
+- numpy
 
 ## View documents of this project
 

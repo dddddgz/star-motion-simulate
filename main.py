@@ -11,6 +11,7 @@ import pyini
 import os
 import tkinter as tk
 import tkinter.filedialog as fd
+import numpy as np
 from rich.console import Console
 from math import isclose
 from time import sleep
@@ -30,15 +31,12 @@ PATH = os.path.dirname(__file__)
 console = Console()
 
 class MessageThread(Thread):
-    threads = []
-
     def __init__(self):
         super().__init__()
         self._message = ""
         self._message_changed = False
         self._running = True
         self._event = Event()
-        MessageThread.threads.append(self)
 
     def run(self):
         while self._running and running:
@@ -112,16 +110,17 @@ def move(t):
             ax1 += accel * (dx / r)
             ay1 += accel * (dy / r)
             az1 += accel * (dz / r)
-        x, y = (
+        x, y, z = (
             x1 + vx1 * t + 0.5 * ax1 * (t ** 2),
-            y1 + vy1 * t + 0.5 * ay1 * (t ** 2)
+            y1 + vy1 * t + 0.5 * ay1 * (t ** 2),
+            z1 + vz1 * t + 0.5 * az1 * (t ** 2)
         )
-        tempx, tempy = sprite1.x, sprite1.y
+        tempx, tempy, tempz = sprite1.x, sprite1.y, sprite1.z
         if not sprite1.locked:
-            sprite1.x, sprite1.y = x, y
+            sprite1.x, sprite1.y, sprite1.z = x, y, z
             sprite1.vx = (x - tempx) / t
             sprite1.vy = (y - tempy) / t
-        del tempx, tempy
+            sprite1.vz = (z - tempz) / t
         sprite1.flush()
     for sprite in sprites_to_delete:
         sprites.remove(sprite)
@@ -223,9 +222,11 @@ while running:
     for sprite, trail in map(lambda xxx: (xxx, xxx.trail), sprites):
         if len(trail) < 2:
             continue
-        trail = list(map(lambda point: ((point[0] + Config.rel[0]) * Config.scale, (point[1] + Config.rel[1]) * Config.scale), trail))
+        trail = list(map(
+            lambda point: (np.array(point) + np.array(Config.rel)).tolist(), trail
+        ))
         pygame.draw.lines(screen, sprite.color, False, trail, 2)
-    for sprite in sprites:
+    for sprite in sorted(sprites, key=lambda star: star.z):
         sprite: Star
         sprite.flush()
         image = sprite.image
