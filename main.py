@@ -1,9 +1,9 @@
 import sys
 
 if float(sys.version[:3].rstrip(".")) < 3.9:
-    print("Your Python Is Too Old")
+    print("Your Python is too old")
 
-if len(sys.argv) > 1 and "cu" in sys.argv:
+if "-u" in sys.argv:
     import check_update
     del check_update
 
@@ -30,12 +30,15 @@ PATH = os.path.dirname(__file__)
 console = Console()
 
 class MessageThread(Thread):
+    threads = []
+
     def __init__(self):
         super().__init__()
         self._message = ""
         self._message_changed = False
         self._running = True
         self._event = Event()
+        MessageThread.threads.append(self)
 
     def run(self):
         while self._running and running:
@@ -64,25 +67,30 @@ class MessageThread(Thread):
 def get_distance(sprite1: Star, sprite2: Star):
     x1, x2 = sprite1.x, sprite2.x
     y1, y2 = sprite1.y, sprite2.y
+    z1, z2 = sprite1.z, sprite2.z
     dx = x2 - x1
     dy = y2 - y1
-    return (dx ** 2 + dy ** 2) ** 0.5
+    dz = z2 - z1
+    return (dx ** 2 + dy ** 2 + dz ** 2) ** 0.5
 
 def move(t):
     sprites_to_delete = []
     for sprite1 in sprites:
-        x1, y1, vx1, vy1, m1 = sprite1.info
-        ax1, ay1 = 0, 0
+        sprite1: Star
+        x1, y1, z1, vx1, vy1, vz1, m1 = sprite1.info
+        ax1, ay1, az1 = 0, 0, 0
         if sprite1 in sprites_to_delete:
             continue
         for sprite2 in sprites:
+            sprite2: Star
             if sprite1 in sprites_to_delete or sprite2 in sprites_to_delete:
                 break
             if sprite1 is sprite2:
                 continue
-            x2, y2, vx2, vy2, m2 = sprite2.info
+            x2, y2, z2, vx2, vy2, vz2, m2 = sprite2.info
             dx = x2 - x1
             dy = y2 - y1
+            dz = z2 - z1
             r = get_distance(sprite1, sprite2)
             if is_collide(sprite1, sprite2):
                 heavier = sprite1 if sprite1.mass > sprite2.mass else sprite2
@@ -90,6 +98,7 @@ def move(t):
                 sprites_to_delete.append(lighter)
                 heavier.vx += lighter.vx
                 heavier.vy += lighter.vy
+                heavier.vz += lighter.vz
                 temp = language["star"]["collide"] % (repr(heavier), repr(lighter))
                 message.text = temp
                 console.log(temp)
@@ -102,6 +111,7 @@ def move(t):
             accel = f / m1
             ax1 += accel * (dx / r)
             ay1 += accel * (dy / r)
+            az1 += accel * (dz / r)
         x, y = (
             x1 + vx1 * t + 0.5 * ax1 * (t ** 2),
             y1 + vy1 * t + 0.5 * ay1 * (t ** 2)
@@ -160,7 +170,7 @@ def change_view(move_x, move_y):
 
 def pause_game():
     """
-    Change game status (paused or no)
+    Change game pause status (paused or not paused)
     :return: None
     """
     Config.pause = not Config.pause

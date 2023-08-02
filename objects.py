@@ -32,9 +32,11 @@ class Star(pygame.sprite.Sprite):
                  radius: number,
                  color:  Any,
                  x:      number,
-                 y:      float,
+                 y:      number,
+                 z:      number,
                  vx:     number,
                  vy:     number,
+                 vz:     number,
                  mass:   number,
                  locked: bool = False
                  ):
@@ -54,8 +56,10 @@ class Star(pygame.sprite.Sprite):
         self.name  : str              = name
         self.x     : number           = x
         self.y     : number           = y
+        self.z     : number           = z
         self.vx    : number           = vx
         self.vy    : number           = vy
+        self.vz    : number           = vz
         self.mass  : number           = mass
         self.locked: bool             = locked
         self.radius: number           = radius
@@ -74,15 +78,15 @@ class Star(pygame.sprite.Sprite):
 
     def __str__(self):
         vars = (
-            self.name,   self.x,      self.y,
-            self.vx,     self.vy,     self.mass,
-            self.locked, self.radius, self.color,
+            self.name,   self.x,      self.y,    self.z,
+            self.vx,     self.vy,     self.vz,   self.mass,
+            self.locked, self.radius, self.color
         )
         return f"Sprite{vars}"
 
     @property
     def info(self):
-        return self.x, self.y, self.vx, self.vy, self.mass
+        return self.x, self.y, self.z, self.vx, self.vy, self.vz, self.mass
 
     def flush(self):
         self.rect.centerx = (self.x + Config.rel[0]) * Config.scale

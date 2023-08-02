@@ -1,12 +1,12 @@
 [
-    #    name       radius color       x    y    vx vy     mass locked
-    Star("Sun",     50,    "yellow",   500, 500, 0,  0,    1e4, True),
-    Star("Mercury",  3,    "gray",     600, 500, 0, -16,   1),
-    Star("Venus",    4.5,  "orange",   630, 500, 0, -15,   1.7),
-    Star("Earth",    5,    "blue",     690, 500, 0, -12,   1.7),
-    Star("Mars",     4,    "red",      720, 500, 0, -11.5, 1.3),
-    Star("Jupiter", 10,    "orange",   830, 500, 0, - 9.5, 10),
-    Star("Saturn",   8,    "bisque",   900, 500, 0, - 9,    9),
-    Star("Uranus",  10,    "skyblue",  990, 500, 0, - 8,    9),
-    Star("Neptune", 10,    "navy",    1100, 500, 0, - 7,    9),
+    #    name       radius color       x    y    z  vx vy    vz  mass locked
+    Star("Sun",     50,    "yellow",   500, 500, 100, 0,  0,    0,  1e4, True),
+    Star("Mercury",  3,    "gray",     600, 500, 0, 0, -16,   0,  1),
+    Star("Venus",    4.5,  "orange",   630, 500, 0, 0, -15,   0,  1.7),
+    Star("Earth",    5,    "blue",     690, 500, 0, 0, -12,   0,  1.7),
+    Star("Mars",     4,    "red",      720, 500, 0, 0, -11.5, 0,  1.3),
+    Star("Jupiter", 10,    "orange",   830, 500, 0, 0, - 9.5, 0, 10),
+    Star("Saturn",   8,    "bisque",   900, 500, 0, 0, - 9,   0,  9),
+    Star("Uranus",  10,    "skyblue",  990, 500, 0, 0, - 8,   0,  9),
+    Star("Neptune", 10,    "navy",    1100, 500, 0, 0, - 7,   0,  9),
 ]

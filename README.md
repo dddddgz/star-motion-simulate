@@ -5,7 +5,7 @@
 | Rank |      Name      |               Reason                | Github Username |
 |:----:|:--------------:|:-----------------------------------:|:---------------:|
 |  1   | hellomyprogram | Fixed 3 bugs & Propose 9 suggestion | hehe-minecraft  |
-|  2   |  cjjJasonchen  |      Fixed 3 bugs & Support me      |     Unknown     |
+|  2   |  cjjJasonchen  |      Fixed 3 bugs & Support me      |        /        |
 |  3   | langyawangchao |     Add Russian version readme      |  fortress1019   |
 
 ## Install Packages

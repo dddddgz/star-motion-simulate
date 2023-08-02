@@ -1,6 +1,6 @@
 [
-    #    name       radius color   x    y    vx  vy  mass
-    Star("planet1", 10,    "red",  500, 100, -1,  0, 1000),
-    Star("planet2", 10,    "lime", 500, 900,  1,  0, 1000),
-    Star("planet3",  5,    "cyan", 500, 500,  0,  0,    1),
+    #    name       radius color   x    y    z  vx  vy vz  mass
+    Star("planet1", 10,    "red",  500, 100, 0, -1,  0, 0, 1000),
+    Star("planet2", 10,    "lime", 500, 900, 0,  1,  0, 0, 1000),
+    Star("planet3",  5,    "cyan", 500, 500, 0,  0,  0, 0,    1),
 ]
