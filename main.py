@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import sys
 
-import pygame.mouse
-
 if "-u" in sys.argv:
     import check_update
     del check_update
