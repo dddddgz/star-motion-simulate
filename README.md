@@ -17,6 +17,8 @@ Packages requires:
 - pyini
 - numpy
 
+> ⚠ This project cannot run on Python 3.7 or earlier. You need Python 3.8 or later to run this project. (It used `math.dist()` function.)
+
 ## View documents of this project
 
 - **LICENSE**: MIT license

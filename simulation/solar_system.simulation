@@ -1,7 +1,7 @@
 [
-    #    name       radius color       x    y    z  vx vy    vz  mass locked
-    Star("Sun",     50,    "yellow",   500, 500, 100, 0,  0,    0,  1e4, True),
-    Star("Mercury",  3,    "gray",     500, 500, 0, 0, -16,   0,  1),
+    #    name       radius color       x    y    z  vx vy    vz  mass  locked
+    Star("Sun",     50,    "yellow",   500, 500, 0, 0,  0,    0,  1e4, True),
+    Star("Mercury",  3,    "gray",     600, 500, 0, 0, -16,   0,  1),
     Star("Venus",    4.5,  "orange",   630, 500, 0, 0, -15,   0,  1.7),
     Star("Earth",    5,    "blue",     690, 500, 0, 0, -12,   0,  1.7),
     Star("Mars",     4,    "red",      720, 500, 0, 0, -11.5, 0,  1.3),

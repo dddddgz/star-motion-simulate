@@ -1,8 +1,6 @@
+from __future__ import annotations
+
 import sys
-
-if float(sys.version[:3].rstrip(".")) < 3.9:
-    print("Your Python is too old")
-
 if "-u" in sys.argv:
     import check_update
     del check_update
@@ -13,7 +11,7 @@ import tkinter as tk
 import tkinter.filedialog as fd
 import numpy as np
 from rich.console import Console
-from math import isclose
+from math import isclose, dist
 from time import sleep
 from threading import Thread, Event
 from objects import *
@@ -205,9 +203,9 @@ pygame.mouse.set_visible(False)
 with open(f"simulation/{config['simulation']['file']}.simulation", "r", encoding="utf-8") as f:
     sprites = eval(f.read())
 
-message: Message      = Message()
-pause:   Button       = Button("pause.png", pause_game)
-buttons: list[Button] = [pause]
+message:      Message      = Message()
+pause:        Button       = Button("pause.png", pause_game, "暂停游戏")
+buttons:      list[Button] = [pause]
 
 mouse_normal: pygame.Surface = pygame.image.load("normal.png")
 mouse_click : pygame.Surface = pygame.image.load("click.png")
@@ -219,20 +217,23 @@ while running:
     clock.tick(30)
     if not Config.pause:
         move(2)
-    for sprite, trail in map(lambda xxx: (xxx, xxx.trail), sprites):
+    for star, trail in map(lambda xxx: (xxx, xxx.trail), sprites):
         if len(trail) < 2:
             continue
         trail = list(map(
             lambda point: (np.array(point) + np.array(Config.rel)).tolist(), trail
         ))
-        pygame.draw.lines(screen, sprite.color, False, trail, 2)
-    for sprite in sorted(sprites, key=lambda star: star.z):
-        sprite: Star
-        sprite.flush()
-        image = sprite.image
-        image = pygame.transform.scale(image, (sprite.radius * 2 * Config.scale,) * 2)
-        screen.blit(image, sprite.rect)
-        screen.blit(sprite.text, sprite.rect.topright)
+        pygame.draw.lines(screen, star.color, False, trail, 2)
+    for star in sorted(sprites, key=lambda star: star.z):
+        star: Star
+        star.flush()
+        image = star.image
+        temp_scale = star.radius * 2 * Config.scale
+        temp_scale *= max(1 - star.z / 1000, 0.02)
+        temp_scale = (temp_scale, temp_scale)
+        image = pygame.transform.scale(image, temp_scale)
+        screen.blit(image, star.rect)
+        screen.blit(star.text, star.rect.topright)
     try:
         screen.blit(message.image, message.rect)
     except pygame.error:
@@ -240,8 +241,10 @@ while running:
     if screen.get_width() > width:
         for button in buttons:
             screen.blit(button.image, button.rect)
-            if button.rect.collidepoint(pygame.mouse.get_pos()):
+            pos = pygame.mouse.get_pos()
+            if button.rect.collidepoint(pos):
                 mouse = mouse_click
+                screen.blit(button.prompt, pos)
             else:
                 mouse = mouse_normal
     if pygame.mouse.get_focused() != 0:
@@ -306,8 +309,8 @@ while running:
                     if filepath:
                         with open(filepath, "w") as f:
                             f.write("[\n")
-                            for sprite in sprites:
-                                f.write(f"    {str(sprite)},\n")
+                            for star in sprites:
+                                f.write(f"    {str(star)},\n")
                             f.write("]")
             elif event.key in (pygame.K_LEFT, pygame.K_KP_4):
                 change_view(movement / Config.scale, 0)

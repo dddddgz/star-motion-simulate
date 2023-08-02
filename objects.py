@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pygame
 from time import time
 from typing import *
@@ -130,11 +132,23 @@ class Message(pygame.sprite.Sprite):
 class Button(pygame.sprite.Sprite):
     count = 0
 
-    def __init__(self, img_name: str, function: Any):
+    def __init__(self, img_name: str, callback: Any, title: str = ""):
+        """
+        A button that shows on sidebar.
+        :param img_name: the image path of button
+        :param callback: function that will be called when button is clicked
+        :param title: text that will be shown when mouse hovers on the button
+        """
         pygame.sprite.Sprite.__init__(self)
         self._id = self.count
         Button.count += 1
-        self.func = function
+        self.func      = callback
+        self.text_surf = Config.font.render(title, False, (255, 255, 255))
+        size           = self.text_surf.get_size()
+        self.prompt    = pygame.Surface((size[0] + 20, size[1] + 20))
+        self.prompt.fill((64, 64, 64))
+        self.prompt.fill((0, 0, 0), (10, 10, size[0] - 20, size[1] - 20))
+        self.prompt.blit(self.text_surf, (10, 10))
         self.image = pygame.image.load(img_name)
         self.rect = self.image.get_rect()
         self.rect.topleft = (1010, self._id * 50 + 10)
