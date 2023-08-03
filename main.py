@@ -1,11 +1,5 @@
 from __future__ import annotations
 
-import sys
-
-if "-u" in sys.argv:
-    import check_update
-    del check_update
-
 import pyini
 import os
 import tkinter as tk
@@ -199,7 +193,7 @@ while running:
     screen.fill((0, 0, 0))
     clock.tick(30)
     if not Config.pause:
-        move(2)
+        move(Config.speed)
     for star, trail in map(lambda xxx: (xxx, xxx.trail), sprites):
         if len(trail) < 2:
             continue
@@ -319,4 +313,44 @@ while running:
                 change_view(0, movement / Config.scale)
             elif event.key in (pygame.K_DOWN, pygame.K_KP_2):
                 change_view(0, -movement / Config.scale)
+            elif event.key == pygame.K_1:
+                Config.speed = 1
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_2:
+                Config.speed = 2
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_3:
+                Config.speed = 3
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_4:
+                Config.speed = 4
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_5:
+                Config.speed = 5
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_6:
+                Config.speed = 6
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_7:
+                Config.speed = 7
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_8:
+                Config.speed = 8
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_9:
+                Config.speed = 9
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
+            elif event.key == pygame.K_0:
+                Config.speed = 10
+                message.text = f"Speed: {Config.speed}"
+                disappear_message()
 pygame.quit()

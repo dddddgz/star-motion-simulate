@@ -14,6 +14,7 @@ class Config:
     scale: number           = 1
     font : pygame.font.Font = pygame.font.SysFont("Microsoft YaHei UI", 20)
     pause: bool             = False
+    speed: number           = 2
 
 class TrailPoint(tuple):
     def __init__(self, pos):
@@ -122,8 +123,8 @@ class Message(pygame.sprite.Sprite):
     def flush(self, pos: Iterable[number]):
         """
         Flush image and rect attribute
-        :param pos:
-        :return:
+        :param pos: message's topright
+        :return: None
         """
         self.image = Config.font.render(self._text, False, (255, 255, 255))
         self.rect = self.image.get_rect()
