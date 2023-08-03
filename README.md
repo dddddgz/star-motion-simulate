@@ -31,4 +31,4 @@ Choose your language: [Chinese Simplified](README-zh.md) | [English](README-en.m
 
 **Didn't see your language?**  
 > Sorry, I don't have enough language foundation, and I don't know enough about language differences.  
-> If you want to contribute the language that you know, please Fork this project, then [submit a Pull Request](https://github.com/dddddgz/star-motion-simulate/pulls), like this: [Pull Request #2](https://github.com/dddddgz/star-motion-simulate/pull/2)
+> If you want to contribute the language that you know, please Fork this project, then [submit a Pull Request](https://github.com/dddddgz/star-motion-simulate/pulls), like this: #2

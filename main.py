@@ -31,13 +31,12 @@ def disappear_message():
     d_id += 1
 
 def disappear_function(real_id):
-    if d_id - 1 == real_id:
-        try:
-            while message.text:
-                message.text = message.text[:-1]
-                sleep(0.05)
-        except pygame.error:
-            return
+    try:
+        while running and  message.text and d_id - 1 == real_id:
+            message.text = message.text[:-1]
+            sleep(0.05)
+    except pygame.error:
+        return
 
 def get_distance(sprite1: Star, sprite2: Star):
     x1, x2 = sprite1.x, sprite2.x
@@ -110,6 +109,14 @@ def is_collide(sprite1, sprite2):
     """
     r1, r2 = sprite1.radius, sprite2.radius
     return r1 + r2 > get_distance(sprite1, sprite2)
+
+def get_desc(star):
+    """
+    Get the description surface of a star.
+    :param star: Star object
+    :return: None
+    """
+    # im coding...
 
 def zoom(direction, each=0.02):
     """
@@ -224,7 +231,6 @@ while running:
             pause.image = pygame.image.load("pause.png")
             pause.title = language["button"]["pause"]
         screen.blit(pause.image, pause.rect)
-
         pos = pygame.mouse.get_pos()
         if pause.rect.collidepoint(pos):
             mouse = mouse_click
@@ -271,6 +277,8 @@ while running:
                     screen = pygame.display.set_mode(size)
                 else:
                     screen = pygame.display.set_mode((width + 100, height))
+            elif event.key == pygame.K_f:
+                screen = pygame.display.set_mode()
             elif event.mod & pygame.KMOD_CTRL:
                 # Clicked ctrl key
                 if event.key == pygame.K_d:

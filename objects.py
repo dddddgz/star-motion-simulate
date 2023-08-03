@@ -169,3 +169,5 @@ class Button(pygame.sprite.Sprite):
         self.prompt    = pygame.Surface((size[0] + 20, size[1]))
         self.prompt.fill((64, 64, 64))
         self.prompt.blit(self.text_surf, (10, 0))
+
+#class gundongtiao
