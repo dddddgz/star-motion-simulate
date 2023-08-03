@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pygame.mouse
 import pyini
 import os
 import tkinter as tk
@@ -114,9 +115,8 @@ def get_desc(star):
     """
     Get the description surface of a star.
     :param star: Star object
-    :return: None
+    :return: A surface
     """
-    # im coding...
 
 def zoom(direction, each=0.02):
     """
@@ -216,8 +216,15 @@ while running:
         temp_scale *= max(1 - star.z / 1000, 0.02)
         temp_scale = (temp_scale, temp_scale)
         image = pygame.transform.scale(image, temp_scale)
-        screen.blit(image, star.rect)
-        screen.blit(star.text, star.rect.topright)
+        new_rect = pygame.Rect(star.rect.topleft, image.get_size())
+        screen.blit(image, new_rect)
+        screen.blit(star.text, new_rect.topright)
+        pos = pygame.mouse.get_pos()
+        # Mouse hovered on it
+        if new_rect.collidepoint(pos):
+            # Draw description surface
+            # screen.blit(get_desc(star), pos)
+            pass
     try:
         screen.blit(message.image, message.rect)
     except pygame.error:
