@@ -47,13 +47,13 @@ def get_distance(sprite1: Star, sprite2: Star):
 
 def move(t):
     sprites_to_delete = []
-    for sprite1 in sprites:
+    for sprite1 in stars:
         sprite1: Star
         x1, y1, z1, vx1, vy1, vz1, m1 = sprite1.info
         ax1, ay1, az1 = 0, 0, 0
         if sprite1 in sprites_to_delete:
             continue
-        for sprite2 in sprites:
+        for sprite2 in stars:
             sprite2: Star
             if sprite1 in sprites_to_delete or sprite2 in sprites_to_delete:
                 break
@@ -97,8 +97,8 @@ def move(t):
             sprite1.vz = (z - tempz) / t
         sprite1.flush()
     for sprite in sprites_to_delete:
-        sprites.remove(sprite)
-    for sprite in sprites:
+        stars.remove(sprite)
+    for sprite in stars:
         sprite.add_to_trail()
 
 def is_collide(sprite1, sprite2):
@@ -195,13 +195,16 @@ pygame.display.set_caption(language["game"]["title"])
 pygame.mouse.set_visible(False)
 
 with open(f"simulation/{config['simulation']['file']}.simulation", "r", encoding="utf-8") as f:
-    sprites = eval(f.read())
+    stars = eval(f.read())
 
-message:      Message        = Message()
-pause:        Button         = Button("pause.png", pause_game, language["button"]["pause"])
+message     : Message        = Message()
+pause       : Button         = Button("pause.png" , pause_game, language["button"]["pause"])
+follow      : Button         = Button("follow.png", None,       language["button"]["follow"])
 
-showing:      Any           = None
+showing     : Any           = None
 showing_pos: tuple[int, ...]= (0, 0)
+following   : Any           = None
+screenshot  : bool          = False
 
 mouse_normal: pygame.Surface = pygame.image.load("normal.png")
 mouse_click : pygame.Surface = pygame.image.load("click.png")
@@ -213,14 +216,15 @@ while running:
     clock.tick(30)
     if not Config.pause:
         move(Config.speed)
-    for star, trail in map(lambda xxx: (xxx, xxx.trail), sprites):
+    for star, trail in map(lambda xxx: (xxx, xxx.trail), stars):
         if len(trail) < 2:
             continue
         trail = list(map(
             lambda point: ((np.array(point[:2]) + np.array(Config.rel)) * Config.scale).tolist(), trail
         ))
         pygame.draw.lines(screen, star.color, False, trail, 2)
-    for star in sorted(sprites, key=lambda star: star.z):
+    stars.sort(key=lambda star: star.z)
+    for star in stars:
         if showing:
             screen.blit(get_desc(showing), showing_pos)
         star: Star
@@ -305,40 +309,6 @@ while running:
                     screen = pygame.display.set_mode((width + 100, height))
             elif event.key == pygame.K_f:
                 screen = pygame.display.set_mode()
-            elif event.mod & pygame.KMOD_CTRL:
-                # Clicked ctrl key
-                if event.key == pygame.K_d:
-                    filepath = fd.asksaveasfilename(
-                        initialdir=PATH,
-                        defaultextension=".png",
-                        filetypes=[
-                            (language["save"]["picture"] % "PNG", "*.png"),
-                            (language["save"]["other"], "*.*")
-                        ]
-                    )
-                    if filepath:
-                        pygame.image.save(screen, filepath)
-                elif event.key == pygame.K_s:
-                    filepath = fd.asksaveasfilename(
-                        initialdir=os.path.join(PATH, "simulation"),
-                        defaultextension=".simulation",
-                        filetypes=[
-                            (language["save"]["simulation"], "*.simulation"),
-                            (language["save"]["other"], "*.*")
-                        ]
-                    )
-                    if filepath:
-                        with open(filepath, "w") as f:
-                            f.write("[\n")
-                            for star in sprites:
-                                f.write(f"    {str(star)},\n")
-                            f.write("]")
-                elif event.key == pygame.K_0:
-                    zoom(0)
-                elif event.key in (pygame.K_EQUALS, pygame.K_KP_PLUS):
-                    zoom(1)
-                elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
-                    zoom(-1)
             elif event.key in (pygame.K_LEFT, pygame.K_KP_4):
                 change_view(movement / Config.scale, 0)
             elif event.key in (pygame.K_RIGHT, pygame.K_KP_6):
@@ -387,4 +357,42 @@ while running:
                 Config.speed = 10
                 message.text = f"Speed: {Config.speed}"
                 disappear_message()
+            elif event.mod & pygame.KMOD_CTRL:
+                # Clicked ctrl key
+                if event.key == pygame.K_d:
+                    filepath = fd.asksaveasfilename(
+                        initialdir=PATH,
+                        defaultextension=".png",
+                        filetypes=[
+                            (language["save"]["picture"] % "PNG", "*.png"),
+                            (language["save"]["picture"] % "JPG", "*.jpg"),
+                            (language["save"]["picture"] % "BMP", "*.bmp"),
+                            (language["save"]["other"], "*.*")
+                        ]
+                    )
+                    if filepath:
+                        pygame.image.save(screen, filepath)
+                elif event.key == pygame.K_s:
+                    filepath = fd.asksaveasfilename(
+                        initialdir=os.path.join(PATH, "simulation"),
+                        defaultextension=".simulation",
+                        filetypes=[
+                            (language["save"]["simulation"], "*.simulation"),
+                            (language["save"]["other"], "*.*")
+                        ]
+                    )
+                    if filepath:
+                        with open(filepath, "w") as f:
+                            f.write("[\n")
+                            for star in stars:
+                                f.write(f"    {str(star)},\n")
+                            f.write("]")
+                elif event.key == pygame.K_0:
+                    zoom(0)
+                elif event.key in (pygame.K_EQUALS, pygame.K_KP_PLUS):
+                    zoom(1)
+                elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
+                    zoom(-1)
+                elif event.key == pygame.K_w:
+                    running = False
 pygame.quit()

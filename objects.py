@@ -10,7 +10,7 @@ number = Union[float, int]
 pygame.init()
 
 class Config:
-    rel  : list[int]        = [0, 0]
+    rel  : list[int, ...]   = [0, 0]
     scale: number           = 1
     font : pygame.font.Font = pygame.font.SysFont("Microsoft YaHei UI", 20)
     pause: bool             = False
@@ -133,16 +133,21 @@ class Message(pygame.sprite.Sprite):
 class Button(pygame.sprite.Sprite):
     count = 0
 
-    def __init__(self, img_name: str, callback: Any, title: str = ""):
+    def __init__(
+        self,
+        img_name: str,
+        callback: Any,
+        title   : str          = "",
+        pos     : tuple[int, ] = None
+    ):
         """
         A button that shows on sidebar.
         :param img_name: the image path of button
         :param callback: function that will be called when button is clicked
         :param title: text that will be shown when mouse hovers on the button
+        :param pos: position of star. If not given, use id (sidebar pos)
         """
         pygame.sprite.Sprite.__init__(self)
-        self._id       = self.count
-        Button.count  += 1
         self._title    = title
         self.func      = callback
         self.text_surf = Config.font.render(title, False, (255, 255, 255), (64, 64, 64))
@@ -152,7 +157,12 @@ class Button(pygame.sprite.Sprite):
         self.prompt.blit(self.text_surf, (10, 0))
         self.image = pygame.image.load(img_name)
         self.rect = self.image.get_rect()
-        self.rect.topleft = (1010, self._id * 50 + 10)
+        if pos is None:
+            self._id       = self.count
+            Button.count  += 1
+            self.rect.topleft = (1010, self._id * 50 + 10)
+        else:
+            self.rect.topleft = pos
 
     def __call__(self):
         self.func()
@@ -169,3 +179,9 @@ class Button(pygame.sprite.Sprite):
         self.prompt    = pygame.Surface((size[0] + 20, size[1]))
         self.prompt.fill((64, 64, 64))
         self.prompt.blit(self.text_surf, (10, 0))
+
+    def is_hover(self) -> bool:
+        """
+        Judge is mouse hovering on this button
+        :return: boolean
+        """

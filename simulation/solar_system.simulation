@@ -7,6 +7,6 @@
     Star("Mars",        4,    "red",      720, 500, 0, 0, -11.5, 0,  1.3),
     Star("Jupiter",    10,    "orange",   830, 500, 0, 0, - 9.5, 0, 10),
     Star("Saturn",      8,    "bisque",   900, 500, 0, 0, - 9,   0,  9),
-    Star("Uranus",     10,    "skyblue",  990, 500, 0, 0, - 8,   0,  9),
-    Star("Neptune",    10,    "navy",    1100, 500, 0, 0, - 7,   0,  9),
+    Star("Uranus",     10,    "skyblue", 1000, 500, 0, 0, - 7.9, 0,  9),
+    Star("Neptune",    10,    "navy",    1150, 500, 0, 0, - 6.1,   0,  9),
 ]

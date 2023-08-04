@@ -37,7 +37,7 @@ Choose language: [Chinese (Simplefied)](#zh) | [English](#en) | [Russian](#ru)
 
 <a name="en"></a>
 
-[Back to top](#)
+[Back to top](#readme)
 
 ## Install Packages
 
@@ -70,7 +70,7 @@ You can change the simulation file by changing `simulation` under the `simulatio
 
 <a name="ru"></a>
 
-[обратно наверх](#)
+[обратно наверх](#readme)
 
 ## Установить библиотеку
 
@@ -100,16 +100,3 @@ config.ini — это файл конфигурации игры.
 Вы можете изменить файл имитации, изменив «simulation» в пункте «simulation».
 
 > В игре нажмите `Ctrl+S`, чтобы экспортировать файл симуляции текущего состояния, нажмите `Ctrl+D`, чтобы экспортировать картинку
-
-<!-- > ⚠ This project cannot run on Python 3.7 or earlier. You need Python 3.8 or later to run this project. (It used `math.dist()` function.) -->
-
-<!-- ## View documents of this project -->
-
-<!-- - **LICENSE**: MIT license -->
-<!-- - **AUTHOR**: dddddgz -->
-
-<!-- Choose your language: [Chinese Simplified](README-zh.md) | [English](README-en.md) | [Russian](README-ru.md) -->
-
-<!-- **Didn't see your language?** -->
-<!-- > Sorry, I don't have enough language foundation, and I don't know enough about language differences. -->
-<!-- > If you want to contribute the language that you know, please Fork this project, then [submit a Pull Request](https://github.com/dddddgz/star-motion-simulate/pulls), like this: [Pull Request #2](https://github.com/dddddgz/star-motion-simulate/pull/2) -->
