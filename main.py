@@ -117,6 +117,15 @@ def get_desc(star):
     :param star: Star object
     :return: A surface
     """
+    surf = pygame.Surface((200, 150)).convert_alpha()
+    surf.fill((64, 64, 128, 64))
+    t1 = Config.font.render(language["description"]["name"] % star.name, False, (255, 255, 255))
+    t2 = Config.font.render(language["description"]["x"] % star.x, False, (255, 255, 255))
+    t3 = Config.font.render(language["description"]["y"] % star.y, False, (255, 255, 255))
+    surf.blit(t1, (0, 0))
+    surf.blit(t2, (0, t1.get_height()))
+    surf.blit(t3, (0, t1.get_height() + t2.get_height()))
+    return surf
 
 def zoom(direction, each=0.02):
     """
@@ -191,6 +200,9 @@ with open(f"simulation/{config['simulation']['file']}.simulation", "r", encoding
 message:      Message        = Message()
 pause:        Button         = Button("pause.png", pause_game, language["button"]["pause"])
 
+showing:      Any           = None
+showing_pos: tuple[int, ...]= (0, 0)
+
 mouse_normal: pygame.Surface = pygame.image.load("normal.png")
 mouse_click : pygame.Surface = pygame.image.load("click.png")
 mouse       : pygame.Surface = mouse_normal
@@ -209,6 +221,8 @@ while running:
         ))
         pygame.draw.lines(screen, star.color, False, trail, 2)
     for star in sorted(sprites, key=lambda star: star.z):
+        if showing:
+            screen.blit(get_desc(showing), showing_pos)
         star: Star
         star.flush()
         image = star.image
@@ -220,11 +234,16 @@ while running:
         screen.blit(image, new_rect)
         screen.blit(star.text, new_rect.topright)
         pos = pygame.mouse.get_pos()
-        # Mouse hovered on it
-        if new_rect.collidepoint(pos):
-            # Draw description surface
-            # screen.blit(get_desc(star), pos)
-            pass
+        if showing is None:
+            # No star description is showing
+            # Mouse hovered on it
+            if new_rect.collidepoint(pos):
+                # Draw description surface
+                showing = star
+                showing_pos = pos
+        elif showing is star:
+            if not (new_rect.collidepoint(pos) or pygame.Rect(showing_pos, (200, 150)).collidepoint(pos)):
+                showing = None
     try:
         screen.blit(message.image, message.rect)
     except pygame.error:
