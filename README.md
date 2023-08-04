@@ -4,6 +4,8 @@ Choose language: [Chinese (Simplefied)](#zh) | [English](#en) | [Russian](#ru)
 
 <a name="zh"></a>
 
+[回到顶部](#)
+
 ## 安装库
 
 需要的库：
@@ -35,6 +37,8 @@ Choose language: [Chinese (Simplefied)](#zh) | [English](#en) | [Russian](#ru)
 
 <a name="en"></a>
 
+[Back to top](#)
+
 ## Install Packages
 
 Packages requires:
@@ -47,6 +51,7 @@ Packages requires:
 ## Contributors
 
 |      Name      | GitHub username |            Reason           |
+|:--------------:|:---------------:|:---------------------------:|
 | hellomyprogram | hehe-minecraft  | Fixed 3 bugs, 9 suggestions |
 |  cjjJasonchen  |        /        |  Fixed 3 bugs, support me   |
 | langyawangchao |   fortress1019  |    Added Russian readme     |
@@ -64,6 +69,8 @@ You can change the simulation file by changing `simulation` under the `simulatio
 > In the game, press `Ctrl+S` to export the simulation file of the current state, press `Ctrl+D` to export the picture
 
 <a name="ru"></a>
+
+[обратно наверх](#)
 
 ## Установить библиотеку
 
