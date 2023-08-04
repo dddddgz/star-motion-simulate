@@ -4,7 +4,7 @@ Choose language: [Chinese (Simplefied)](#zh) | [English](#en) | [Russian](#ru)
 
 <a name="zh"></a>
 
-[回到顶部](#)
+[回到顶部](#readme)
 
 ## 安装库
 
