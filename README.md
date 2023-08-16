@@ -1,6 +1,6 @@
 # Pygame Star Motion Simulate
 
-Choose language: [Chinese (Simplefied)](#zh) | [English](#en) | [Russian](#ru)
+Choose language: [Chinese (Simplified)](#zh) | [English](#en) | [Russian](#ru)
 
 <a name="zh"></a>
 
