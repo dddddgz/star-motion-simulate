@@ -41,7 +41,7 @@ Choose language: [Chinese (Simplified)](#zh) | [English](#en) | [Russian](#ru)
 
 ## Install Packages
 
-Packages requires:
+Packages required:
 
 - rich (console output)
 - pygame (game main window and mouse events)
