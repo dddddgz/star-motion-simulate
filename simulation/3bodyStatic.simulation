@@ -1,0 +1,7 @@
+[
+    #    name       radius color     x    y  , z   vx  vy vz mass locked
+    Star("planet1", 10,    "green",  200, 200, 0,  3,  1, 0,  500),
+    Star("planet2", 10,    "blue",   800, 200, 0,  1,  2, 0,  500),
+    Star("planet3", 10,    "cyan",   500, 800, 0,  0, -3, 0, 1000),
+    Star("planet4",  5,    "orange", 500, 500, 0, -3, -2, 0,    1)
+]
